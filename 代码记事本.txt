@@ -1,0 +1,78 @@
+章节9直方图
+>getwd()#获取/查看当前路径
+>setwd("D:/hailong/hailong_download/DataAnalysis")  #设置当前路径
+>employees <- read.csv("hfda_ch09_employees.csv",header=TRUE)  #读取csv文件赋值给employees对象-P265
+>employees
+>hist(employees$received,breaks=50)  #绘制直方图-P265
+
+>sd(employees$received)  #查看标准偏差-P267
+>summary(employees$received)  #汇总统计值
+
+> hist(employees$received[employees$year == 2007],breaks = 50)#绘制直方图(第一个参数为指定要用的数据，breaks为如何分组)-P272
+> X11()#打开新的绘图窗口
+> hist(employees$received[employees$year == 2008],breaks = 50)
+> X11()
+> hist(employees$received[employees$gender == "F"],breaks = 50)
+> X11()
+> hist(employees$received[employees$gender == "M"],breaks = 50)
+> X11()
+> hist(employees$received[employees$negotiated == FALSE],breaks = 50)
+> X11()
+> hist(employees$received[employees$negotiated == TRUE],breaks = 50)
+
+章节10回归
+> employees <- read.csv("hfda_ch10_employees.csv",header=TRUE)
+> head(employees,n=30)  #显示employees对象里前30行数据/查看所加载的新数据的快捷方法-P291
+> plot(employees$requested[employees$negotiated==TRUE],employees$received[employees$negotiated==TRUE])#plot()绘制散点图-P291
+> cor(employees$requested[employees$negotiated==TRUE],employees$received[employees$negotiated==TRUE])#cor()求两变量的相关系数-P301
+
+> myLm <- lm(received[negotiated==TRUE]~requested[negotiated==TRUE],data = employees)
+> myLm$coefficients    #$coefficients指令为查看回归方程的截距和斜率-P307
+
+> my_raise<-5
+> 2.3+0.7*my_raise  #数值代入方程计算求值-P310
+
+章节11合理误差
+> summary(myLm)     #myLm模型统计-P339
+> summary(myLm)$sigma   #$sigma指令为查看均方根误差
+
+> myLmBig <- lm(received[negotiated==TRUE & requested > 10]~requested[negotiated==TRUE & requested > 10],data=employees)
+> myLmSmall <- lm(received[negotiated==TRUE & requested <= 10]~requested[negotiated==TRUE & requested <= 10],data=employees)
+
+> summary(myLmSmall)$coefficients    #$coefficients指令为查看回归方程的截距和斜率
+> summary(myLmSmall)$sigma	    #$sigma指令为查看均方根误差
+> summary(myLmBig)$coefficients
+> summary(myLmBig)$sigma -P353
+
+章节12关系数据库
+> dispatch <- read.csv("dispatch analysis.csv",header=TRUE)
+> head(dispatch)  #显示表前几行
+> plot(Sales~jitter(Article.count),data=dispatch) #$jitter()指令使数据相互分隔，易于在散点图中识别-P371
+
+> articleHitsComments <- read.csv("hfda_ch12_articleHitsComments.csv",header=TRUE)
+> library(lattice)  #加载"lattice"数据包
+> xyplot(webHits~commentCount|authorName,data=articleHitsComments) #xyplot()方法绘制lattice散点图
+> head(articleHitsComments)  #显示数据表前几行-P379
+
+章节13整理数据
+> hfhh <- read.csv("hfda_ch13_data_for_R.csv",header=TRUE)
+> head(hfhh) #查看数据表前几行
+
+> NewLastName <- sub("\\(.*\\)","",hfhh$LastName)  #\\(.*\\)为正则表达式，sub()方法使用空格替换固定模式的字符串
+> head(NewLastName) #查看目标列前几个数据-P405
+
+> hfhh$LastName <- NULL   #将hfhh表的LastName列设置为空值
+> hfhh["LastName"] <- NewLastName  #将NewLastName列的值赋给hfhh表的LastName列
+> write.csv(hfhh,file="hfhh.csv")  #创建hfhh.csv写入并保存至本地文件夹-P407
+
+> hfhhSorted <- hfhh[order(hfhh$PersonID),]  #对hfhh数据表的PersonsID列进行排序，命名对象为hfhhSorted
+> head(hfhhSorted,n=50)  #查看hfhhSorted对象的前50条数据 -P409
+
+> hfhhNamesOnly <- hfhhSorted  #创建新对象hfhhNamesOnly并赋值
+> hfhhNamesOnly$CallID <- NULL  #目标列不需要使用空值替换删除
+> hfhhNamesOnly$Time <- NULL  #目标列不需要使用空值替换删除
+> hfhhNamesOnly <- unique(hfhhNamesOnly)  #使用unique函数删除重复的名称
+> head(hfhhNamesOnly,n=50)  #查看新表hfhhNamesOnly数据前50行
+> write.csv(hfhhNamesOnly,file="hfhhNamesOnly.csv")  #创建hfhhNamesOnly.csv并写入保存至本地文件夹-P413
+
+清屏命令Ctrl+L
